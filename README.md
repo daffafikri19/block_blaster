@@ -1,73 +1,94 @@
-# React + TypeScript + Vite
+# 🧩 Block Puzzle Web (React + TypeScript + OOP)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Clone versi web dari game puzzle ala Block Blast, dibuat menggunakan:
 
-Currently, two official plugins are available:
+- ⚡ Vite  
+- ⚛️ React  
+- 🟦 TypeScript  
+- 🧠 OOP Game Engine Architecture  
+- 🖱️ Pointer-based Drag & Drop  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- ✅ 8x8 Grid Board
+- ✅ 3-Piece Tray System
+- ✅ Drag & Drop (Pointer Events API)
+- ✅ Snap Preview (Valid / Invalid Highlight)
+- ✅ Row & Column Clear (No Gravity)
+- ✅ Score System
+- ✅ Best Score Tracking
+- ✅ Game Over Detection
+- ✅ Responsive Layout
+- ✅ Clean OOP Separation (Engine & UI)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🏗️ Architecture
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Project ini memisahkan logic game dan UI dengan jelas:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+│
+├── engine/
+│ ├── Board.ts // Grid logic & collision detection
+│ ├── Game.ts // Game rules, scoring, tray system
+│ └── pieces.ts // Piece definitions (matrix 0/1)
+│
+├── ui/
+│ ├── BoardView.tsx
+│ ├── PieceTray.tsx
+│ └── PieceView.tsx
+│
+└── App.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Engine Layer (Pure TypeScript, OOP)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Tidak bergantung pada React
+- Bertanggung jawab atas state & rules
+- Mudah untuk di-test
+- Menggunakan Uint8Array untuk efisiensi grid
+
+### UI Layer (React)
+
+- Render berdasarkan snapshot dari engine
+- Mengatur drag & drop
+- Tidak menyimpan game logic
+
+---
+
+## 🎮 Gameplay
+
+- Pemain diberikan 3 piece setiap ronde
+- Piece bisa di-drag dan di-drop ke grid
+- Jika satu baris atau kolom penuh → otomatis terhapus
+- Jika tidak ada piece yang bisa ditempatkan → Game Over
+
+---
+
+## 📸 Screenshots
+
+### Gameplay
+![Gameplay](src/assets/gameplay.png)
+
+### Drag & Drop Preview
+![Drag Preview](src/assets/drag_and_drop.png)
+
+### Piece Tray
+![Piece Tray](src/assets/piece_tray.png)
+
+### Gameover
+![Game Over](src/assets/game_over.png)
+---
+
+## 🚀 Installation
+
+Clone repository:
+
+```bash
+git clone https://github.com/daffafikri19/block_blaster.git block_blaster
+cd block_blaster
