@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { forwardRef, useMemo } from "react";
 
 /**
  * Props minimal:
@@ -26,52 +26,56 @@ export type BoardViewProps = {
  * - BoardView tidak tahu rules game.
  * - BoardView cuma menampilkan data.
  */
-export function BoardView({ size, cells, previewCells, previewValid }: BoardViewProps) {
-    // Supaya render cell simple, kita precompute array index 0..63
-    const indices = useMemo(() => Array.from({ length: size * size }, (_, i) => i), [size]);
+export const BoardView = forwardRef<HTMLDivElement, BoardViewProps>(
+    ({ size, cells, previewCells, previewValid }, ref) => {
+        const indices = useMemo(() => Array.from({ length: size * size }, (_, i) => i), [size]);
 
-    return (
-        <div
-            style={{
-                width: "min(92vw, 420px)", // responsive: max 420px
-                aspectRatio: "1 / 1",      // board selalu kotak
-                display: "grid",
-                gridTemplateColumns: `repeat(${size}, 1fr)`,
-                gap: 6,
-                padding: 10,
-                borderRadius: 16,
-                background: "#111",
-                border: "1px solid #222",
-                userSelect: "none",
-                touchAction: "none", // penting untuk pointer events nanti
-            }}
-        >
-            {indices.map((i) => {
-                const filled = cells[i] === 1;
+        return (
+            <div
+                ref={ref}
+                style={{
+                    width: "min(92vw, 420px)",
+                    aspectRatio: "1 / 1",
+                    display: "grid",
+                    gridTemplateColumns: `repeat(${size}, 1fr)`,
+                    gap: 6,
+                    padding: 10,
+                    borderRadius: 16,
+                    background: "#111",
+                    border: "1px solid #222",
+                    userSelect: "none",
+                    touchAction: "none", // penting untuk pointer events di mobile
+                    position: "relative",
+                }}
+            >
+                {indices.map((i) => {
+                    const filled = cells[i] === 1;
 
-                // preview highlight (nanti akan dipakai di step drag)
-                const inPreview = previewCells?.has(i) ?? false;
+                    // preview overlay: hanya tampil di cell yang masih kosong
+                    const inPreview = previewCells?.has(i) ?? false;
 
-                // Style dasar
-                let bg = filled ? "#5ad1ff" : "#1c1c1c";
+                    let bg = filled ? "#5ad1ff" : "#1c1c1c";
 
-                // Style preview overlay (valid/invalid)
-                if (!filled && inPreview) {
-                    bg = previewValid ? "#4cff7a" : "#ff4c4c";
-                }
+                    // kalau preview aktif dan cell kosong -> warnai sesuai valid/invalid
+                    if (!filled && inPreview) {
+                        bg = previewValid ? "#4cff7a" : "#ff4c4c";
+                    }
 
-                return (
-                    <div
-                        key={i}
-                        style={{
-                            borderRadius: 10,
-                            background: bg,
-                            border: "1px solid #2a2a2a",
-                            boxShadow: filled ? "0 4px 14px rgba(90, 209, 255, 0.25)" : "none",
-                        }}
-                    />
-                );
-            })}
-        </div>
-    );
-}
+                    return (
+                        <div
+                            key={i}
+                            style={{
+                                borderRadius: 10,
+                                background: bg,
+                                border: "1px solid #2a2a2a",
+                                boxShadow: filled ? "0 4px 14px rgba(90, 209, 255, 0.25)" : "none",
+                            }}
+                        />
+                    );
+                })}
+            </div>
+        );
+    }
+);
+
+BoardView.displayName = "BoardView";

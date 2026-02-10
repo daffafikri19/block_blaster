@@ -20,6 +20,11 @@ export type PieceTrayProps = {
      * Disable tray jika game over (opsional)
      */
     disabled?: boolean;
+
+    /**
+     * cell size agar sama dengan board
+     */
+    cellPx?: number;
 };
 
 /**
@@ -31,25 +36,15 @@ export function PieceTray({
     onPiecePointerDown,
     activeIndex,
     disabled,
+    cellPx = 18
 }: PieceTrayProps) {
     return (
-        <div
-            style={{
-                width: "min(92vw, 420px)",
-                display: "flex",
-                gap: 10,
-                justifyContent: "space-between",
-                padding: 10,
-                borderRadius: 16,
-                background: "#101010",
-                border: "1px solid #222",
-            }}
-        >
+        <div style={{ display: "flex", gap: "10px" }}>
             {tray.map((pieceId, idx) => (
                 <PieceView
                     key={`${pieceId}-${idx}`}
                     pieceId={pieceId}
-                    cellPx={18}
+                    cellPx={cellPx}
                     active={activeIndex === idx}
                     disabled={disabled}
                     onPointerDown={
